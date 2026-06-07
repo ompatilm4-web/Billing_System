@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BillFlow — Smart Billing System</title>
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/> -->
+
     <style>
         *,
         *::before,
@@ -544,6 +544,40 @@
                 transform: translateY(0);
             }
         }
+
+        /* Auth-aware nav */
+        .nav-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: #ffffff;
+            cursor: default;
+            flex-shrink: 0;
+        }
+
+        .btn-logout {
+            padding: 0.55rem 1.1rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .btn-logout:hover {
+            color: var(--accent3, #ef4444);
+            border-color: var(--accent3, #ef4444);
+        }
     </style>
 </head>
 
@@ -559,9 +593,8 @@
             <li><a href="#pricing">Pricing</a></li>
             <li><a href="#">Docs</a></li>
         </ul>
-        <div class="nav-cta">
-            <a href="login.html" class="btn-ghost">Log in</a>
-            <a href="login.html" class="btn-primary">Get Started</a>
+        <div class="nav-cta" id="navCta">
+            <!-- Rendered by JS below -->
         </div>
     </nav>
 
@@ -708,6 +741,8 @@
         </div>
     </footer>
 
+
+    <script src="../static/home.js"></script>
 </body>
 
 </html>
