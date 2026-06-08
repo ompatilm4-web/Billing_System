@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BillFlow — Smart Billing System</title>
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #ffffff;
+            --surface: #f5f4ff;
+            --border: #e0deff;
+            --accent: #4f46e5;
+            --accent2: #818cf8;
+            --text: #1e1b4b;
+            --muted: #6b7280;
+            --card: #fafafe;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* NOISE OVERLAY */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 5%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn-ghost {
+            padding: 0.55rem 1.3rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--accent);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .btn-primary {
+            padding: 0.55rem 1.4rem;
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.2s, transform 0.15s;
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.25);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 5% 5rem;
+            position: relative;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .hero-glow2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(129, 140, 248, 0.08) 0%, transparent 65%);
+            top: 30%;
+            left: 30%;
+            pointer-events: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(79, 70, 229, 0.08);
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            animation: fadeUp 0.7s 0.1s ease both;
+        }
+
+        h1 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-sub {
+            max-width: 560px;
+            margin: 1.6rem auto 2.8rem;
+            font-size: 1.1rem;
+            color: var(--muted);
+            line-height: 1.7;
+            font-weight: 300;
+            animation: fadeUp 0.7s 0.2s ease both;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeUp 0.7s 0.3s ease both;
+        }
+
+        .btn-lg {
+            padding: 0.85rem 2rem;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 5rem;
+            animation: fadeUp 0.7s 0.4s ease both;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .stat-num span {
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 0.2rem;
+        }
+
+        /* FEATURES */
+        .section {
+            padding: 6rem 5%;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        .section-sub {
+            color: var(--muted);
+            margin-top: 0.8rem;
+            font-size: 1rem;
+            line-height: 1.7;
+            max-width: 500px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: border-color 0.3s, transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(79, 70, 229, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(79, 70, 229, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .feature-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+
+        .feature-card p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* PRICING */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 4rem;
+            max-width: 960px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pricing-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .pricing-card.popular {
+            border-color: var(--accent);
+            background: linear-gradient(145deg, rgba(79, 70, 229, 0.05), var(--card));
+        }
+
+        .popular-tag {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 1rem;
+            border-radius: 100px;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .plan-name {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .plan-price {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .plan-price sup {
+            font-size: 1.2rem;
+            vertical-align: top;
+            margin-top: 0.5rem;
+            color: var(--muted);
+        }
+
+        .plan-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--muted);
+        }
+
+        .plan-desc {
+            color: var(--muted);
+            font-size: 0.88rem;
+            margin: 0.8rem 0 1.5rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .plan-features li {
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--muted);
+            display: flex;
+            gap: 0.6rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* CTA */
+        .cta-section {
+            padding: 6rem 5%;
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(79, 70, 229, 0.04), transparent);
+        }
+
+        .cta-section h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .cta-section p {
+            color: var(--muted);
+            margin: 1rem 0 2.5rem;
+            font-size: 1.05rem;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2.5rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        footer p {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Auth-aware nav */
+        .nav-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: #ffffff;
+            cursor: default;
+            flex-shrink: 0;
+        }
+
+        .btn-logout {
+            padding: 0.55rem 1.1rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .btn-logout:hover {
+            color: var(--accent3, #ef4444);
+            border-color: var(--accent3, #ef4444);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a onclick="window.location.reload();" style="cursor:pointer;" class="logo">
+            <div class="logo-dot"></div>
+            Bill<span>Flow</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#">Docs</a></li>
+        </ul>
+        <div class="nav-cta" id="navCta">
+            <!-- Rendered by JS below -->
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-glow2"></div>
+        <div class="badge">
+            <div class="badge-dot"></div> Now with AI-powered invoicing
+        </div>
+        <h1>Billing made<br /><em>effortless.</em></h1>
+        <p class="hero-sub">Automate invoices, track payments, and manage subscriptions — all in one clean, powerful
+            dashboard designed for modern businesses.</p>
+        <div class="hero-btns">
+            <a href="login.html" class="btn-primary btn-lg">Start for free →</a>
+            <a href="#features" class="btn-ghost btn-lg">See how it works</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-num">50<span>K+</span></div>
+                <div class="stat-label">Businesses</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">$2<span>B+</span></div>
+                <div class="stat-label">Processed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">99<span>.9%</span></div>
+                <div class="stat-label">Uptime</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features">
+        <div class="section-tag">Features</div>
+        <h2 class="section-title">Everything you need<br />to get paid faster</h2>
+        <p class="section-sub">A complete billing suite built for speed, accuracy, and growth.</p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Instant Invoicing</h3>
+                <p>Generate professional invoices in seconds. Customize templates, add your branding, and send with one
+                    click.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Recurring Billing</h3>
+                <p>Automate subscription billing and never miss a renewal. Set custom cycles — weekly, monthly, or
+                    annual.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Revenue Analytics</h3>
+                <p>Real-time dashboards showing MRR, ARR, churn, and payment trends. Make data-driven decisions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Payments</h3>
+                <p>PCI-DSS compliant payment processing. Accept cards, UPI, bank transfers, and wallets globally.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Multi-Currency</h3>
+                <p>Bill clients in their local currency. Auto-convert with live exchange rates across 150+ currencies.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI Reminders</h3>
+                <p>Smart follow-ups sent automatically for overdue invoices. Reduce late payments by up to 60%.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section" id="pricing">
+        <div class="section-tag">Pricing</div>
+        <h2 class="section-title">Simple, transparent pricing</h2>
+        <p class="section-sub">No hidden fees. Upgrade, downgrade, or cancel anytime.</p>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="plan-name">Starter</div>
+                <div class="plan-price"><sup>$</sup>0<span>/mo</span></div>
+                <p class="plan-desc">Perfect for freelancers getting started.</p>
+                <ul class="plan-features">
+                    <li>Up to 5 clients</li>
+                    <li>10 invoices/month</li>
+                    <li>Basic templates</li>
+                    <li>Email support</li>
+                </ul>
+                <a href="login.html" class="btn-ghost" style="display:block;text-align:center;">Get started free</a>
+            </div>
+
+            <div class="pricing-card popular">
+                <div class="popular-tag">Most Popular</div>
+                <div class="plan-name">Pro</div>
+                <div class="plan-price"><sup>$</sup>29<span>/mo</span></div>
+                <p class="plan-desc">For growing businesses that need more power.</p>
+                <ul class="plan-features">
+                    <li>Unlimited clients</li>
+                    <li>Unlimited invoices</li>
+                    <li>Recurring billing</li>
+                    <li>Analytics dashboard</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="login.html" class="btn-primary" style="display:block;text-align:center;">Start Pro trial</a>
+            </div>
+
+            <div class="pricing-card">
+                <div class="plan-name">Enterprise</div>
+                <div class="plan-price"><sup>$</sup>99<span>/mo</span></div>
+                <p class="plan-desc">Advanced features for large organizations.</p>
+                <ul class="plan-features">
+                    <li>Everything in Pro</li>
+                    <li>White-label invoices</li>
+                    <li>API access</li>
+                    <li>Dedicated manager</li>
+                    <li>SLA guarantee</li>
+                </ul>
+                <a href="login.html" class="btn-ghost" style="display:block;text-align:center;">Contact sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2>Ready to streamline<br />your billing?</h2>
+        <p>Join 50,000+ businesses that trust BillFlow to manage their finances.</p>
+        <a href="login.html" class="btn-primary btn-lg">Create your free account →</a>
+    </section>
+
+    <footer>
+        <div class="logo" style="font-family:'Syne',sans-serif;font-weight:800;">
+            <div class="logo-dot"></div>Bill<span style="color:var(--accent)">Flow</span>
+        </div>
+        <p>© 2025 BillFlow. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Support</a>
+        </div>
+    </footer>
+
+
+    <script src="../static/home.js"></script>
+</body>
+
+</html>

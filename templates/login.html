@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BillFlow — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f5f4ff;
+      --border: #e0deff;
+      --accent: #4f46e5;
+      --accent2: #818cf8;
+      --text: #1e1b4b;
+      --muted: #6b7280;
+      --card: #fafafe;
+      --error: #ef4444;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── LEFT PANEL ── */
+    .left-panel {
+      width: 45%;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(79, 70, 229, 0.12) 0%, transparent 60%);
+      bottom: -100px;
+      left: -100px;
+      pointer-events: none;
+    }
+
+    .panel-glow2 {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(129, 140, 248, 0.1) 0%, transparent 60%);
+      top: 50px;
+      right: -50px;
+      pointer-events: none;
+    }
+
+    .panel-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.6rem;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 1;
+      cursor: pointer;
+    }
+
+    .panel-logo span { color: var(--accent); }
+
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    .panel-content { z-index: 1; }
+
+    .panel-content h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .panel-content h2 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .panel-content p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .feature-check {
+      width: 22px;
+      height: 22px;
+      background: rgba(79, 70, 229, 0.12);
+      border-radius: 6px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+
+    .panel-testimonial {
+      z-index: 1;
+      background: rgba(79, 70, 229, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem;
+    }
+
+    .testimonial-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .author-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #ffffff;
+    }
+
+    .author-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .author-role {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* ── BACK BUTTON ── */
+    .back-to-home {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: rgb(20, 20, 20);
+      padding: 10px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(12, 12, 12, 0.15);
+      z-index: 10;
+    }
+
+    .back-to-home:hover {
+      background: var(--surface);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── RIGHT PANEL ── */
+    .right-panel {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 3rem;
+      position: relative;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      animation: slideIn 0.5s ease both;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .login-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .login-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4rem;
+    }
+
+    .login-header p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    /* ── TABS ── */
+    .auth-tabs {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.6rem;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 7px;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--card);
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ── FLASH MESSAGES ── */
+    .flash-msg {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .flash-error {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: var(--error);
+    }
+
+    .flash-success {
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #16a34a;
+    }
+
+    /* ── FORM ── */
+    .form-group { margin-bottom: 1.2rem; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .input-wrap { position: relative; }
+
+    .input-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      font-size: 1rem;
+      opacity: 0.5;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 2.6rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+    }
+
+    input::placeholder { color: var(--muted); }
+
+    .toggle-pw {
+      position: absolute;
+      right: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+
+    .toggle-pw:hover { color: var(--text); }
+
+    .form-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: auto;
+      padding: 0;
+    }
+
+    .forgot-link {
+      font-size: 0.85rem;
+      color: var(--accent);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .forgot-link:hover { opacity: 0.7; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--accent);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 24px rgba(79, 70, 229, 0.35);
+      letter-spacing: 0.01em;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:active { transform: translateY(0); }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .social-login { display: flex; gap: 0.8rem; }
+
+    .social-btn {
+      flex: 1;
+      padding: 0.7rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .social-btn:hover {
+      border-color: var(--accent);
+      background: rgba(79, 70, 229, 0.05);
+    }
+
+    .signup-cta {
+      text-align: center;
+      margin-top: 1.8rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .signup-cta a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .signup-cta a:hover { text-decoration: underline; }
+
+    #registerForm { display: none; }
+
+    @media (max-width: 768px) {
+      .left-panel { display: none; }
+      .right-panel { padding: 2rem 1.5rem; }
+      .back-to-home { top: 12px; right: 12px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══ LEFT PANEL ══ -->
+  <div class="left-panel">
+    <div class="panel-glow"></div>
+    <div class="panel-glow2"></div>
+
+    <a onclick="window.location.href='/'" style="cursor:pointer;" class="panel-logo">
+      <div class="logo-dot"></div>Bill<span>Flow</span>
+    </a>
+
+    <div class="panel-content">
+      <h2>Take control of your <em>billing</em></h2>
+      <p>Join 50,000+ businesses that automate invoicing, track payments, and grow faster with BillFlow.</p>
+      <ul class="feature-list">
+        <li><div class="feature-check">✓</div>Send invoices in under 60 seconds</li>
+        <li><div class="feature-check">✓</div>Automated recurring billing &amp; reminders</li>
+        <li><div class="feature-check">✓</div>Real-time payment tracking &amp; analytics</li>
+        <li><div class="feature-check">✓</div>Supports 150+ currencies worldwide</li>
+      </ul>
+    </div>
+
+    <div class="panel-testimonial">
+      <p class="testimonial-text">"BillFlow cut our invoice processing time by 80%. We now get paid 2x faster with zero manual work."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">SK</div>
+        <div>
+          <div class="author-name">Sarah Kim</div>
+          <div class="author-role">CEO, Vantage Studio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RIGHT PANEL ══ -->
+  <a href="/" class="back-to-home">
+    <span>←</span>
+    <span>Back to Home</span>
+  </a>
+
+  <div class="right-panel">
+    <div class="login-box">
+
+      <div class="login-header">
+        <h1>Welcome back</h1>
+        <p>Sign in to your BillFlow account</p>
+      </div>
+
+      <!-- Flash messages injected by Flask (Jinja2) -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash-msg flash-{{ category }}">
+              {{ '⚠' if category == 'error' else '✓' }} {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="tab-btn active" onclick="switchTab('login')">Sign In</button>
+        <button class="tab-btn" onclick="switchTab('register')">Create Account</button>
+      </div>
+
+      <!-- ══ LOGIN FORM ══
+           action="/login"  → hits Flask @app.route('/login')
+           method="POST"    → triggers if request.method == 'POST'
+           name attributes  → required so request.form.get() works
+      -->
+      <div id="loginForm">
+        <form action="/login" method="POST">
+
+          <div class="form-group">
+            <label for="login_email">Email address</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉</span>
+              <input
+                type="email"
+                id="login_email"
+                name="email"
+                placeholder="you@company.com"
+                required
+                autocomplete="email"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="loginPw">Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔑</span>
+              <input
+                type="password"
+                id="loginPw"
+                name="password"
+                placeholder="••••••••"
+                required
+                autocomplete="current-password"
+              />
+              <!-- type="button" prevents it from submitting the form -->
+              <button type="button" class="toggle-pw" onclick="togglePw('loginPw', this)">👁</button>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="remember-me">
+              <input type="checkbox" name="remember" /> Remember me
+            </label>
+            <a href="/forgot-password" class="forgot-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn-submit">Sign In →</button>
+
+        </form>
+
+        <div class="divider">or continue with</div>
+        <div class="social-login">
+          <button class="social-btn" type="button">🌐 Google</button>
+          <button class="social-btn" type="button">𝕏 X / Twitter</button>
+        </div>
+      </div>
+
+      <!-- ══ REGISTER FORM ══ -->
+      <div id="registerForm">
+        <form action="/register" method="POST">
+
+          <div class="form-group">
+            <label for="reg_name">Full name</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input
+                type="text"
+                id="reg_name"
+                name="name"
+                placeholder="John Doe"
+                required
+                autocomplete="name"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg_email">Work email</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉</span>
+              <input
+                type="email"
+                id="reg_email"
+                name="email"
+                placeholder="you@company.com"
+                required
+                autocomplete="email"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="regPw">Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔑</span>
+              <input
+                type="password"
+                id="regPw"
+                name="password"
+                placeholder="Min. 8 characters"
+                minlength="8"
+                required
+                autocomplete="new-password"
+              />
+              <button type="button" class="toggle-pw" onclick="togglePw('regPw', this)">👁</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">Create Account →</button>
+
+        </form>
+
+        <div class="divider">or continue with</div>
+        <div class="social-login">
+          <button class="social-btn" type="button">🌐 Google</button>
+          <button class="social-btn" type="button">𝕏 X / Twitter</button>
+        </div>
+      </div>
+
+      <div class="signup-cta" id="switchHint">
+        Don't have an account? <a href="#" onclick="switchTab('register'); return false;">Sign up free</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    /* ── Tab switcher ── */
+    function switchTab(tab) {
+      const loginForm    = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      const switchHint   = document.getElementById('switchHint');
+      const tabs         = document.querySelectorAll('.tab-btn');
+      const header       = document.querySelector('.login-header h1');
+      const subheader    = document.querySelector('.login-header p');
+
+      if (tab === 'login') {
+        loginForm.style.display    = 'block';
+        registerForm.style.display = 'none';
+        tabs[0].classList.add('active');
+        tabs[1].classList.remove('active');
+        header.textContent    = 'Welcome back';
+        subheader.textContent = 'Sign in to your BillFlow account';
+        switchHint.innerHTML  = 'Don\'t have an account? <a href="#" onclick="switchTab(\'register\'); return false;">Sign up free</a>';
+      } else {
+        loginForm.style.display    = 'none';
+        registerForm.style.display = 'block';
+        tabs[0].classList.remove('active');
+        tabs[1].classList.add('active');
+        header.textContent    = 'Create account';
+        subheader.textContent = 'Start your free BillFlow trial today';
+        switchHint.innerHTML  = 'Already have an account? <a href="#" onclick="switchTab(\'login\'); return false;">Sign in</a>';
+      }
+    }
+
+    /* ── Password visibility toggle ── */
+    function togglePw(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        btn.textContent = '👁';
+      }
+    }
+  </script>
+
+</body>
+</html>
