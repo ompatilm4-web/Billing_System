@@ -92,4 +92,3 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Action: ${action} on Invoice: ${id}`);
         }
     });
-});

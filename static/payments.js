@@ -67,4 +67,3 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleModal(false);
         console.log(`New payment recorded: ${txnId}`);
     });
-});

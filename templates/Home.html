@@ -594,7 +594,8 @@
             <li><a href="#">Docs</a></li>
         </ul>
         <div class="nav-cta" id="navCta">
-            <!-- Rendered by JS below -->
+            <a href="{{ url_for('login') }}" class="btn-ghost">Log in</a>
+            <a href="{{ url_for('login') }}" class="btn-primary">Get Started</a>
         </div>
     </nav>
 
@@ -609,10 +610,9 @@
         <p class="hero-sub">Automate invoices, track payments, and manage subscriptions — all in one clean, powerful
             dashboard designed for modern businesses.</p>
         <div class="hero-btns">
-            <a href="/login" class="btn-primary btn-lg">Start for free →</a>
-             <!-- <button onclick="window.location.href='/login'">
-    Login
-</button> -->
+<a href="{{ url_for('login') }}" class="btn-primary btn-lg">
+    Start for free →
+</a>
             <a href="#features" class="btn-ghost btn-lg">See how it works</a>
         </div>
         <div class="hero-stats">
@@ -691,7 +691,7 @@
                     <li>Basic templates</li>
                     <li>Email support</li>
                 </ul>
-                <a href="login.html" class="btn-ghost" style="display:block;text-align:center;">Get started free</a>
+                <a href="{{ url_for('login') }}" class="btn-ghost" style="display:block;text-align:center;">Get started free</a>
             </div>
 
             <div class="pricing-card popular">
@@ -706,7 +706,7 @@
                     <li>Analytics dashboard</li>
                     <li>Priority support</li>
                 </ul>
-                <a href="login.html" class="btn-primary" style="display:block;text-align:center;">Start Pro trial</a>
+                <a href="{{ url_for('login') }}" class="btn-primary" style="display:block;text-align:center;">Start Pro trial</a>
             </div>
 
             <div class="pricing-card">
@@ -720,7 +720,7 @@
                     <li>Dedicated manager</li>
                     <li>SLA guarantee</li>
                 </ul>
-                <a href="login.html" class="btn-ghost" style="display:block;text-align:center;">Contact sales</a>
+                <a href="{{ url_for('login') }}" class="btn-ghost" style="display:block;text-align:center;">Contact sales</a>
             </div>
         </div>
     </section>
@@ -729,7 +729,7 @@
     <section class="cta-section">
         <h2>Ready to streamline<br />your billing?</h2>
         <p>Join 50,000+ businesses that trust BillFlow to manage their finances.</p>
-        <a href="login.html" class="btn-primary btn-lg">Create your free account →</a>
+        <a href="{{ url_for('login') }}" class="btn-primary btn-lg">Create your free account →</a>
     </section>
 
     <footer>
@@ -745,7 +745,7 @@
     </footer>
 
 
-    <script src="../static/home.js"></script>
+
 </body>
 
 </html>

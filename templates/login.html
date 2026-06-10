@@ -559,7 +559,7 @@
            name attributes  → required so request.form.get() works
       -->
       <div id="loginForm">
-        <form action="/login" method="POST">
+        <form action="{{ url_for('login') }}" method="POST">
 
           <div class="form-group">
             <label for="login_email">Email address</label>
@@ -597,7 +597,7 @@
             <label class="remember-me">
               <input type="checkbox" name="remember" /> Remember me
             </label>
-            <a href="/forgot-password" class="forgot-link">Forgot password?</a>
+            <a href="#" class="forgot-link" onclick="alert('Password reset not available yet.'); return false;">Forgot password?</a>
           </div>
 
           <button type="submit" class="btn-submit">Sign In →</button>
@@ -613,7 +613,7 @@
 
       <!-- ══ REGISTER FORM ══ -->
       <div id="registerForm">
-        <form action="/register" method="POST">
+        <form action="#" method="POST" onsubmit="alert('Registration not available yet.'); return false;">
 
           <div class="form-group">
             <label for="reg_name">Full name</label>

@@ -30,4 +30,3 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Account deletion requested.');
         }
     });
-});

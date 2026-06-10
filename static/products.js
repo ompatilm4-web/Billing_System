@@ -69,4 +69,4 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleModal(false);
         console.log(`New product added: ${name}`);
     });
-});
+    

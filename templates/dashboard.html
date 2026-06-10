@@ -126,7 +126,6 @@
             color: var(--accent);
         }
 
-        /* Logout gets a red hover */
         .nav-item.logout:hover {
             background: rgba(239, 68, 68, 0.07);
             color: var(--accent3);
@@ -610,88 +609,85 @@
 <body>
 
     <!-- ══ SIDEBAR ══ -->
-    <aside class="sidebar">
-        <a href="/" class="sidebar-logo">
-            <div class="logo-dot"></div>
-            <span class="logo-text">Bill<span>Flow</span></span>
+<aside class="sidebar">
+    <a href="{{ url_for('home') }}" class="sidebar-logo">
+        <div class="logo-dot"></div>
+        <span class="logo-text">Bill<span>Flow</span></span>
+    </a>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+
+        <a href="{{ url_for('dashboard') }}" class="nav-item active">
+            <span class="nav-icon">⬛</span> Dashboard
         </a>
 
-        <nav class="sidebar-nav">
-            <div class="nav-section-label">Main</div>
-            <a href="dashboard.html" class="nav-item active">
-                <span class="nav-icon">⬛</span> Dashboard
-            </a>
-            <a href="invoices.html" class="nav-item">
-                <span class="nav-icon">🧾</span> Invoices
-                <span class="nav-badge">12</span>
-            </a>
-            <a href="customers.html" class="nav-item">
-                <span class="nav-icon">👥</span> Customers
-            </a>
-            <a href="products.html" class="nav-item">
-                <span class="nav-icon">📦</span> Products
-            </a>
-            <a href="payments.html" class="nav-item">
-                <span class="nav-icon">💰</span> Payments
-            </a>
+        <a href="{{ url_for('invoice') }}" class="nav-item">
+            <span class="nav-icon">🧾</span> Invoices
+            <span class="nav-badge">12</span>
+        </a>
 
-            <div class="nav-section-label">Settings</div>
-            <a href="settings.html" class="nav-item">
-                <span class="nav-icon">⚙️</span> Settings
-<<<<<<< HEAD
-            </button>
-            <button class="nav-item">
-                <span class="nav-icon">🔔</span> Notifications
-            </button>
+        <a href="{{ url_for('customers') }}" class="nav-item">
+            <span class="nav-icon">👥</span> Customers
+        </a>
 
-            <!-- ✅ Logout — posts to Flask /logout route -->
-            <a href="/logout" class="nav-item logout" style="text-decoration:none;">
-=======
-            </a>
-            <a href="login.html" class="nav-item">
->>>>>>> 7b7027d (setup billing system project structure and requirements)
-                <span class="nav-icon">🚪</span> Logout
-            </a>
-        </nav>
+        <a href="{{ url_for('products') }}" class="nav-item">
+            <span class="nav-icon">📦</span> Products
+        </a>
 
-        <div class="sidebar-user">
-            <!-- ✅ Jinja2: shows owner's initials & email from Flask session -->
-            <div class="user-avatar">
-                {{ session.get('owner_email', 'O')[0].upper() }}
-            </div>
-            <div>
-                <div class="user-name">Owner</div>
-                <div class="user-plan">{{ session.get('owner_email', '') }}</div>
-            </div>
+        <a href="{{ url_for('payments') }}" class="nav-item">
+            <span class="nav-icon">💰</span> Payments
+        </a>
+
+        <div class="nav-section-label">Settings</div>
+
+        <a href="{{ url_for('settings') }}" class="nav-item">
+            <span class="nav-icon">⚙️</span> Settings
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="nav-item logout">
+            <span class="nav-icon">🚪</span> Logout
+        </a>
+    </nav>
+
+    <div class="sidebar-user">
+        <div class="user-avatar">
+            {{ session.get('owner_email', 'O')[0].upper() }}
         </div>
-    </aside>
+        <div>
+            <div class="user-name">Owner</div>
+            <div class="user-plan">{{ session.get('owner_email', '') }}</div>
+        </div>
+    </div>
+</aside>
 
-    <!-- ══ MAIN ══ -->
-    <div class="main">
+<!-- ══ MAIN ══ -->
+<div class="main">
 
-        <!-- TOPBAR -->
-        <div class="topbar">
-            <div>
-                <div class="topbar-title">Dashboard</div>
-                <div class="topbar-sub" id="topbarDate"></div>
-            </div>
-            <div class="topbar-right">
-                <div class="search-bar">
-                    <span style="color:var(--muted);font-size:0.9rem;">🔍</span>
-                    <input type="text" placeholder="Search invoices, clients..." />
-                </div>
-                <div class="icon-btn">
-                    🔔
-                    <div class="notif-dot"></div>
-                </div>
-                <!-- <button class="btn-new">+ New Invoice</button> -->
-            </div>
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div>
+            <div class="topbar-title">Dashboard</div>
+            <div class="topbar-sub" id="topbarDate"></div>
         </div>
 
+        <div class="topbar-right">
+            <div class="search-bar">
+                <span style="color:var(--muted);font-size:0.9rem;">🔍</span>
+                <input type="text" placeholder="Search invoices, clients..." />
+            </div>
+
+            <div class="icon-btn">
+                🔔
+                <div class="notif-dot"></div>
+            </div>
+
+            <!-- <button class="btn-new">+ New Invoice</button> -->
+        </div>
+    </div>
         <!-- CONTENT -->
         <div class="content">
 
-            <!-- GREETING — Jinja2 renders owner email from session -->
             <div class="greeting">
                 <h2>Welcome back, <span>{{ session.get('owner_email', 'Owner').split('@')[0] }}</span> 👋</h2>
                 <p>Here's what's happening with your billing today.</p>
@@ -941,20 +937,18 @@
             { label: 'Sun', income: 40, expense: 25 },
         ];
 
-        const maxVal   = Math.max(...chartData.map(d => Math.max(d.income, d.expense)));
-        const chartEl  = document.getElementById('chartBars');
-        const chartH   = 120;
+        const maxVal  = Math.max(...chartData.map(d => Math.max(d.income, d.expense)));
+        const chartEl = document.getElementById('chartBars');
+        const chartH  = 120;
 
         chartData.forEach(d => {
-            const group = document.createElement('div');
+            const group    = document.createElement('div');
             group.className = 'bar-group';
-
             const incomeH  = Math.round((d.income  / maxVal) * chartH);
             const expenseH = Math.round((d.expense / maxVal) * chartH);
-
             group.innerHTML = `
                 <div style="display:flex;align-items:flex-end;gap:3px;height:${chartH}px">
-                    <div class="bar bar-income"  style="height:${incomeH}px" title="Income: ₹${d.income}k"></div>
+                    <div class="bar bar-income"  style="height:${incomeH}px"  title="Income: ₹${d.income}k"></div>
                     <div class="bar bar-expense" style="height:${expenseH}px" title="Expense: ₹${d.expense}k"></div>
                 </div>
                 <div class="bar-label">${d.label}</div>
@@ -970,6 +964,7 @@
             });
         });
     </script>
+    <script src="../static/dashboard.js"></script>
 
 </body>
 </html>

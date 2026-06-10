@@ -84,4 +84,3 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`${action} customer: ${customerName}`);
         }
     });
-});
