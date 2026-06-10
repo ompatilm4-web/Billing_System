@@ -926,43 +926,16 @@
     <script src="../static/dashboard.js"></script>
 </body>
 
-        /* ── Bar chart (static demo data) ── */
-        const chartData = [
-            { label: 'Mon', income: 65, expense: 40 },
-            { label: 'Tue', income: 80, expense: 55 },
-            { label: 'Wed', income: 55, expense: 35 },
-            { label: 'Thu', income: 90, expense: 60 },
-            { label: 'Fri', income: 75, expense: 45 },
-            { label: 'Sat', income: 50, expense: 30 },
-            { label: 'Sun', income: 40, expense: 25 },
-        ];
-
-        const maxVal  = Math.max(...chartData.map(d => Math.max(d.income, d.expense)));
-        const chartEl = document.getElementById('chartBars');
-        const chartH  = 120;
-
-        chartData.forEach(d => {
-            const group    = document.createElement('div');
-            group.className = 'bar-group';
-            const incomeH  = Math.round((d.income  / maxVal) * chartH);
-            const expenseH = Math.round((d.expense / maxVal) * chartH);
-            group.innerHTML = `
+       
                 <div style="display:flex;align-items:flex-end;gap:3px;height:${chartH}px">
                     <div class="bar bar-income"  style="height:${incomeH}px"  title="Income: ₹${d.income}k"></div>
                     <div class="bar bar-expense" style="height:${expenseH}px" title="Expense: ₹${d.expense}k"></div>
                 </div>
-                <div class="bar-label">${d.label}</div>
-            `;
-            chartEl.appendChild(group);
-        });
+                <div class="bar-label"></div>
+            
+       
 
-        /* ── Period tab switcher ── */
-        document.querySelectorAll('.period-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
+        
     </script>
     <script src="../static/dashboard.js"></script>
 
