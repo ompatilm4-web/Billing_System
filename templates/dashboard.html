@@ -618,38 +618,27 @@
 
         <nav class="sidebar-nav">
             <div class="nav-section-label">Main</div>
-            <button class="nav-item active">
+            <a href="dashboard.html" class="nav-item active">
                 <span class="nav-icon">⬛</span> Dashboard
-            </button>
-            <button class="nav-item">
-                <span class="nav-icon">📄</span> Invoices
+            </a>
+            <a href="invoices.html" class="nav-item">
+                <span class="nav-icon">🧾</span> Invoices
                 <span class="nav-badge">12</span>
-            </button>
-            <button class="nav-item">
-                <span class="nav-icon">👥</span> Clients
-            </button>
-            <button class="nav-item">
-                <span class="nav-icon">💳</span> Payments
-            </button>
-            <button class="nav-item">
-                <span class="nav-icon">🔄</span> Subscriptions
-            </button>
-
-            <div class="nav-section-label">Analytics</div>
-            <button class="nav-item">
-                <span class="nav-icon">📊</span> Reports
-            </button>
-            <button class="nav-item">
-                <span class="nav-icon">📈</span> Revenue
-            </button>
-            <button class="nav-item">
-                <span class="nav-icon">⚠️</span> Overdue
-                <span class="nav-badge" style="background:var(--accent3);color:#fff;">3</span>
-            </button>
+            </a>
+            <a href="customers.html" class="nav-item">
+                <span class="nav-icon">👥</span> Customers
+            </a>
+            <a href="products.html" class="nav-item">
+                <span class="nav-icon">📦</span> Products
+            </a>
+            <a href="payments.html" class="nav-item">
+                <span class="nav-icon">💰</span> Payments
+            </a>
 
             <div class="nav-section-label">Settings</div>
-            <button class="nav-item">
+            <a href="settings.html" class="nav-item">
                 <span class="nav-icon">⚙️</span> Settings
+<<<<<<< HEAD
             </button>
             <button class="nav-item">
                 <span class="nav-icon">🔔</span> Notifications
@@ -657,6 +646,10 @@
 
             <!-- ✅ Logout — posts to Flask /logout route -->
             <a href="/logout" class="nav-item logout" style="text-decoration:none;">
+=======
+            </a>
+            <a href="login.html" class="nav-item">
+>>>>>>> 7b7027d (setup billing system project structure and requirements)
                 <span class="nav-icon">🚪</span> Logout
             </a>
         </nav>
@@ -691,7 +684,7 @@
                     🔔
                     <div class="notif-dot"></div>
                 </div>
-                <button class="btn-new">+ New Invoice</button>
+                <!-- <button class="btn-new">+ New Invoice</button> -->
             </div>
         </div>
 
@@ -924,6 +917,7 @@
         </div><!-- /content -->
     </div><!-- /main -->
 
+
     <script>
         /* ── Live date in topbar ── */
         const dateEl = document.getElementById('topbarDate');
@@ -932,6 +926,9 @@
                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
             });
         }
+</script>
+    <script src="../static/dashboard.js"></script>
+</body>
 
         /* ── Bar chart (static demo data) ── */
         const chartData = [

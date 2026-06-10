@@ -1,8 +1,12 @@
 // ── Auth guard ──────────────────────────────────────────────
-const user = JSON.parse(localStorage.getItem('bf_user') || 'null');
+let user = JSON.parse(localStorage.getItem('bf_user') || 'null');
 if (!user) {
-    window.location.href = 'login.html';
-} else {
+    // For now, bypass auth with a mock user
+    user = { name: 'Admin User', email: 'admin@billflow.com' };
+    localStorage.setItem('bf_user', JSON.stringify(user));
+}
+
+if (user) {
     // Sidebar avatar & name
     const firstName = user.name ? user.name.split(' ')[0] : user.email.split('@')[0];
     const initials = user.name
