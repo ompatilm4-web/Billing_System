@@ -5,76 +5,133 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.getElementById('customerTableBody');
     const addBtn = document.getElementById('addCustomerBtn');
 
-    // Basic search filtering
-    searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const rows = tableBody.querySelectorAll('tr');
+    // Search Filtering
+    if (searchInput && tableBody) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const rows = tableBody.querySelectorAll('tr');
 
-        rows.forEach(row => {
-            const name = row.querySelector('.client-name').textContent.toLowerCase();
-            const email = row.querySelector('.client-email').textContent.toLowerCase();
-            
-            if (name.includes(term) || email.includes(term)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
+            rows.forEach(row => {
+                const name =
+                    row.querySelector('.client-name')?.textContent.toLowerCase() || '';
+
+                const email =
+                    row.querySelector('.client-email')?.textContent.toLowerCase() || '';
+
+                row.style.display =
+                    name.includes(term) || email.includes(term)
+                        ? ''
+                        : 'none';
+            });
         });
-    });
+    }
 
+    // Modal Elements
     const modalOverlay = document.getElementById('modalOverlay');
     const closeModal = document.getElementById('closeModal');
     const cancelBtn = document.getElementById('cancelBtn');
     const customerForm = document.getElementById('customerForm');
 
     const toggleModal = (show) => {
+        if (!modalOverlay) return;
+
         modalOverlay.classList.toggle('active', show);
-        if (!show) customerForm.reset();
+
+        if (!show && customerForm) {
+            customerForm.reset();
+        }
     };
 
-    addBtn.addEventListener('click', () => toggleModal(true));
-    closeModal.addEventListener('click', () => toggleModal(false));
-    cancelBtn.addEventListener('click', () => toggleModal(false));
+    // Open Modal
+    if (addBtn) {
+        addBtn.addEventListener('click', () => toggleModal(true));
+    }
 
+    // Close Modal
+    if (closeModal) {
+        closeModal.addEventListener('click', () => toggleModal(false));
+    }
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => toggleModal(false));
+    }
+
+    // Close on outside click
     window.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) toggleModal(false);
+        if (e.target === modalOverlay) {
+            toggleModal(false);
+        }
     });
 
-    customerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
+    // Add Customer
+    if (customerForm && tableBody) {
+        customerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
 
-        const name = document.getElementById('custName').value;
-        const email = document.getElementById('custEmail').value;
-        const phone = document.getElementById('custPhone').value;
-        const location = document.getElementById('custLocation').value;
+            const name =
+                document.getElementById('custName')?.value || '';
 
-        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-        const newRow = document.createElement('tr');
+            const email =
+                document.getElementById('custEmail')?.value || '';
 
-        newRow.innerHTML = `
-            <td>
-                <div class="client-info">
-                    <div class="client-avatar" style="background: linear-gradient(135deg, #4f46e5, #818cf8);">${initials}</div>
-                    <div>
-                        <span class="client-name">${name}</span>
-                        <span class="client-email">${email}</span>
+            const phone =
+                document.getElementById('custPhone')?.value || '';
+
+            const location =
+                document.getElementById('custLocation')?.value || '';
+
+            const initials = name
+                .split(' ')
+                .map(n => n[0])
+                .join('')
+                .toUpperCase()
+                .slice(0, 2);
+
+            const newRow = document.createElement('tr');
+
+            newRow.innerHTML = `
+                <td>
+                    <div class="client-info">
+                        <div class="client-avatar"
+                             style="background: linear-gradient(135deg, #4f46e5, #818cf8);">
+                            ${initials}
+                        </div>
+                        <div>
+                            <span class="client-name">${name}</span>
+                            <span class="client-email">${email}</span>
+                        </div>
                     </div>
-                </div>
-            </td>
-            <td>${phone}</td>
-            <td>${location}</td>
-            <td>0 Invoices</td>
-            <td><span class="status-badge status-active">Active</span></td>
-            <td>
-                <button class="action-btn" title="Edit">✏️</button>
-                <button class="action-btn" title="View History">📜</button>
-            </td>
-        `;
+                </td>
+                <td>${phone}</td>
+                <td>${location}</td>
+                <td>0 Invoices</td>
+                <td>
+                    <span class="status-badge status-active">
+                        Active
+                    </span>
+                </td>
+                <td>
+                    <button type="button"
+                            class="action-btn"
+                            title="Edit">
+                        ✏️
+                    </button>
 
-        tableBody.prepend(newRow);
-        toggleModal(false);
-        console.log(`New customer added: ${name}`);
-    });
+                    <button type="button"
+                            class="action-btn"
+                            title="View History">
+                        📜
+                    </button>
+                </td>
+            `;
+
+            tableBody.prepend(newRow);
+
+            toggleModal(false);
+
+            console.log(`New customer added: ${name}`);
+        });
+    }
 
     // Handle action buttons
     tableBody.addEventListener('click', (e) => {
@@ -84,3 +141,4 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`${action} customer: ${customerName}`);
         }
     });
+});

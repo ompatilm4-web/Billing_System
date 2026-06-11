@@ -30,7 +30,7 @@ if (user) {
 // Logout
 document.getElementById('logoutBtn').addEventListener('click', function () {
     localStorage.removeItem('bf_user');
-    window.location.href = 'login.html';
+    window.location.href = '/login';
 });
 
 // ── Render bar chart ────────────────────────────────────────

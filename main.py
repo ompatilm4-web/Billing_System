@@ -1,6 +1,6 @@
-
-from flask import Flask, render_template, request, redirect, session, flash, url_for
-from Core.Database import init_db
+from flask import Flask, render_template, request, redirect, session, flash
+from Core.Database import init_db, db
+from Core.models import Product, Bill, BillItem
 from Core.Auth import verify_owner, login_required
 import os
 
@@ -59,8 +59,7 @@ def logout():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-
-    return render_template("dashboard.html")
+    return render_template('dashboard.html')
 
 
 
@@ -104,5 +103,4 @@ def notifications():
     return render_template("notifications.html")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=8080,debug=True)
-
+    app.run(debug=True, port=8080)
